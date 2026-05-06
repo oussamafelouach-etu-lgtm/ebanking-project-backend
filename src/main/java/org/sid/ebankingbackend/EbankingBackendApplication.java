@@ -7,6 +7,7 @@ import org.sid.ebankingbackend.enums.OperationType;
 import org.sid.ebankingbackend.repositories.AccountOperationRepository;
 import org.sid.ebankingbackend.repositories.BankAccountRepository;
 import org.sid.ebankingbackend.repositories.CustomerRepository;
+import org.sid.ebankingbackend.services.Bankervice;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,6 +24,13 @@ public class EbankingBackendApplication {
         SpringApplication.run(EbankingBackendApplication.class, args);
     }
     @Bean
+    CommandLineRunner commandLineRunner (Bankervice bankervice){
+        return args -> {
+            bankervice.consulter();
+        };
+
+    };
+    //@Bean
     public CommandLineRunner start(CustomerRepository customerRepository, BankAccountRepository bankAccountRepository, AccountOperationRepository accountOperationRepository) {
         return args -> {
             Stream.of("Hassan","Yassine","Aisha").forEach(name->{
@@ -87,6 +95,7 @@ public class EbankingBackendApplication {
                     }
             );
         };
-
     };
+
+
 }
