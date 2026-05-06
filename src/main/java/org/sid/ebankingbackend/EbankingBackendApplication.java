@@ -1,9 +1,7 @@
 package org.sid.ebankingbackend;
 
-import org.sid.ebankingbackend.entities.AccountOperation;
-import org.sid.ebankingbackend.entities.CurrentAccount;
-import org.sid.ebankingbackend.entities.Customer;
-import org.sid.ebankingbackend.entities.SavingAccount;
+import ch.qos.logback.core.net.SyslogOutputStream;
+import org.sid.ebankingbackend.entities.*;
 import org.sid.ebankingbackend.enums.AccountStatus;
 import org.sid.ebankingbackend.enums.OperationType;
 import org.sid.ebankingbackend.repositories.AccountOperationRepository;
@@ -64,6 +62,27 @@ public class EbankingBackendApplication {
                             accountOperation.setBankAccount(acc);
                             accountOperationRepository.save(accountOperation);
 
+                        }
+                        BankAccount bankAccount=
+                                bankAccountRepository.findById("0bc4c156-1bb8-44dd-a8e2-415317d479fa").orElse(null);
+                        if(bankAccount!=null){
+                        System.out.println("***********************");
+                        System.out.println(bankAccount.getId());
+                        System.out.println(bankAccount.getBalance());
+                        System.out.println(bankAccount.getStatus());
+                        System.out.println(bankAccount.getCreatedAt());
+                        System.out.println(bankAccount.getCustomer().getName());
+                        System.out.println(bankAccount.getClass().getSimpleName());
+                        if (bankAccount instanceof CurrentAccount){
+                            System.out.println("Over Draf=>"+((CurrentAccount) bankAccount).getOverDraft());
+                        }else if (bankAccount instanceof SavingAccount){
+                            System.out.println("Rate Interest=>"+((SavingAccount) bankAccount).getInterestRate());
+                        }
+                        bankAccount.getAccountOperations().forEach(
+                                op->{
+                                    System.out.println(op.getType()+"\t"+op.getAmount()+"\t"+op.getOperationDate());
+                                }
+                        );
                         }
                     }
             );
