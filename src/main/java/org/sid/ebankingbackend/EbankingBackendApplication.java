@@ -1,6 +1,7 @@
 package org.sid.ebankingbackend;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
+import org.sid.ebankingbackend.dtos.CustomerDTO;
 import org.sid.ebankingbackend.entities.*;
 import org.sid.ebankingbackend.enums.AccountStatus;
 import org.sid.ebankingbackend.enums.OperationType;
@@ -25,6 +26,16 @@ import java.util.stream.Stream;
 @SpringBootApplication
 public class EbankingBackendApplication {
 
+    private final CustomerRepository customerRepository;
+    private final Bankervice bankervice;
+    private final BankAccountService bankAccountService;
+
+    public EbankingBackendApplication(CustomerRepository customerRepository, Bankervice bankervice, BankAccountService bankAccountService) {
+        this.customerRepository = customerRepository;
+        this.bankervice = bankervice;
+        this.bankAccountService = bankAccountService;
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(EbankingBackendApplication.class, args);
     }
@@ -32,7 +43,7 @@ public class EbankingBackendApplication {
     CommandLineRunner commandLineRunner (BankAccountService bankAccountService){
         return args -> {
             Stream.of("Hassan","Imane","Mohamed").forEach(name->{
-                Customer customer=new Customer();
+                CustomerDTO customer=new CustomerDTO();
                 customer.setName(name);
                 customer.setEmail(name+"@gmail.com");
                 bankAccountService.saveCustomer(customer);
@@ -64,10 +75,10 @@ public class EbankingBackendApplication {
     public CommandLineRunner start(CustomerRepository customerRepository, BankAccountRepository bankAccountRepository, AccountOperationRepository accountOperationRepository) {
         return args -> {
             Stream.of("Hassan","Yassine","Aisha").forEach(name->{
-                Customer customer=new Customer();
+                CustomerDTO customer=new CustomerDTO();
                 customer.setName(name);
                 customer.setEmail(name+"@gmail.com");
-                customerRepository.save(customer);
+                bankAccountService.saveCustomer(customer);
             });
             customerRepository.findAll().forEach(cust->{
                 CurrentAccount currentAccount = new CurrentAccount();
