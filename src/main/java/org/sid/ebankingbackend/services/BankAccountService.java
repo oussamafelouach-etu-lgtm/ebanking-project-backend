@@ -1,5 +1,6 @@
 package org.sid.ebankingbackend.services;
 
+import org.sid.ebankingbackend.AccountHistoryDTO;
 import org.sid.ebankingbackend.dtos.*;
 import org.sid.ebankingbackend.entities.BankAccount;
 import org.sid.ebankingbackend.entities.CurrentAccount;
@@ -8,6 +9,7 @@ import org.sid.ebankingbackend.entities.SavingAccount;
 import org.sid.ebankingbackend.exceptions.BalanceNotsufficientException;
 import org.sid.ebankingbackend.exceptions.BankAccountNotFoundException;
 import org.sid.ebankingbackend.exceptions.CustomerNotFoundException;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -32,4 +34,8 @@ public interface BankAccountService {
     void deleteCustomer(Long customerId);
 
     List<AccountOperationDTO> accountHistory(String accountId);
+
+    AccountHistoryDTO getAccountHistory(String accountId, PageRequest pageRequest) throws BankAccountNotFoundException;
+
+    AccountHistoryDTO getAccountHistory(String accountId, int page, int size) throws BankAccountNotFoundException;
 }
